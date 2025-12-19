@@ -1,4 +1,4 @@
- <section id="about" class="container-xxl py-5">
+ <section id="about" class="container-xxl py-5">  
     <div class="container-fluid py-5">
         <div class="container">
             <div class="row g-5 align-items-center">
