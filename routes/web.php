@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\Admin\DonationController as AdminDonationController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DashboardAdminController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -34,4 +37,36 @@ Route::middleware('auth')->group(function () {
     Route::get('/donasi/create', [DonationController::class, 'create'])->name('donasi.create');
     Route::post('/donasi', [DonationController::class, 'store'])->name('donasi.store');
 });
+
+Route::middleware(['auth', 'role:admin,staff'])->group(function () {
+    Route::get('/admin/donasi', [DonationController::class, 'index'])->name('donasi.index');
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/donations', [AdminDonationController::class, 'index'])
+        ->name('admin.donations.index');
+
+    Route::patch('/donations/{donation}/approve', [AdminDonationController::class, 'approve'])
+        ->name('admin.donations.approve');
+
+    Route::patch('/donations/{donation}/reject', [AdminDonationController::class, 'reject'])
+        ->name('admin.donations.reject');
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('admin.dashboard');
+});
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardAdminController::class, 'index'])
+        ->name('admin.dashboard');
+});
+
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])
+            ->name('admin.dashboard');
+    });
 

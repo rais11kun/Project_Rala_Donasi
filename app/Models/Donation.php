@@ -10,13 +10,15 @@ class Donation extends Model
     //
 
     use HasFactory;
+    protected $table = 'donations';
 
     Protected $fillable = [
         'user_id',
         'title',
         'amount',
-        'status',
         'note',
+        'status',
+        'proof_image',
     ];
 
     public function user()

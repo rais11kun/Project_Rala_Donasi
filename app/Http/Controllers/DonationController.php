@@ -13,6 +13,8 @@ class DonationController extends Controller
     public function index()
     {
         //
+        $donations = Donation::latest()->get();
+        return view('donations.index', compact('donations'));
     }
 
     /**
@@ -30,21 +32,29 @@ class DonationController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
+            $validated = $request->validate([
             'title'  => 'required|string|max:255',
             'amount' => 'required|numeric|min:1000',
             'note'   => 'nullable|string',
-        ]);
+            ]);
 
-        Donation::create([
-            'user_id' => Auth::id(),
-            'title'   => $request->title,
-            'amount'  => $request->amount,
-            'note'    => $request->note,
+            $path = null;
+
+            if ($request->hasFile('proof_image')) {
+                $path = $request->file('proof_image')
+                            ->store('donation_proofs', 'public');
+            }
+
+            \App\Models\Donation::create([
+            'user_id' => auth()->id(),
+            'title'   => $validated['title'],
+            'amount'  => $validated['amount'],
+            'note'    => $validated['note'] ?? null,
+            'proof_image' => $path,
             'status'  => 'pending',
-        ]);
+            ]);
 
-        return redirect('/')->with('success', 'Donasi berhasil dikirim');
+        return redirect()->back()->with('success', 'Donasi berhasil dikirim');
     }
 
     /**
