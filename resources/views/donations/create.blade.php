@@ -4,7 +4,7 @@
 
         {{-- ERROR VALIDASI --}}
         @if ($errors->any())
-            <div style="color:red">
+            <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -13,32 +13,44 @@
             </div>
         @endif
 
-        <form method="POST"
-              action="{{ route('donasi.store') }}"
-              enctype="multipart/form-data">
+        <form method="POST" action="{{ route('donasi.store') }}" enctype="multipart/form-data">
             @csrf
 
-            <div>
-                <label>Judul Donasi</label>
-                <input type="text" name="title" required>
+            <div class="mb-3">
+                <label class="form-label">Judul Donasi</label>
+                <input type="text" name="title" class="form-control" required>
             </div>
 
-            <div>
-                <label>Jumlah Donasi</label>
-                <input type="number" name="amount" required>
+            <div class="mb-3">
+                <label class="form-label">Kategori Donasi</label>
+                <select name="category_id" class="form-control" required>
+                    <option value="">-- Pilih Kategori --</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
-            <div>
-                <label>Catatan</label>
-                <textarea name="note"></textarea>
+            <div class="mb-3">
+                <label class="form-label">Jumlah Donasi</label>
+                <input type="number" name="amount" class="form-control" required>
             </div>
 
-            <div>
-                <label>Bukti Donasi</label>
-                <input type="file" name="proof_image" accept="image/*">
+            <div class="mb-3">
+                <label class="form-label">Catatan</label>
+                <textarea name="note" class="form-control"></textarea>
             </div>
 
-            <button type="submit">Kirim Donasi</button>
+            <div class="mb-3">
+                <label class="form-label">Bukti Donasi</label>
+                <input type="file" name="proof_image" class="form-control" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Kirim Donasi
+            </button>
         </form>
     </div>
 </x-app-layout>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Donation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class DonationController extends Controller
 {
@@ -42,6 +43,8 @@ class DonationController extends Controller
     public function create()
     {
         //
+        $categories = Category::all();
+        return view('donasi.create', compact('categories'));
     }
 
     /**
@@ -50,6 +53,20 @@ class DonationController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+        'title'       => 'required',
+        'amount'      => 'required|numeric|min:1000',
+        'category_id' => 'required|exists:categories,id',
+    ]);
+        Donation::create([
+        'user_id'     => auth()->id(),
+        'title'       => $request->title,
+        'amount'      => $request->amount,
+        'note'        => $request->note,
+        'category_id' => $request->category_id,
+        'status'      => 'pending',
+    ]);
+
     }
 
     /**

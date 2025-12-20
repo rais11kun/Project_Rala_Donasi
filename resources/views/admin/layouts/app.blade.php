@@ -1,34 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>@yield('title', 'Admin Dashboard')</title>
+  <meta charset="utf-8" />
+  <title>@yield('title', 'Admin Dashboard')</title>
 
-    {{-- Argon CSS --}}
-    <link href="{{ asset('asset-admin/css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+  <!-- Argon CSS -->
+  <link href="{{ asset('asset-admin/css/argon-dashboard.css?v=2.0.4') }}" rel="stylesheet" />
 </head>
 
 <body class="g-sidenav-show bg-gray-100">
 
-    {{-- Sidebar --}}
-    @include('admin.layouts.sidebar')
+  {{-- SIDEBAR --}}
+  @include('admin.layouts.sidebar')
 
-    <main class="main-content position-relative border-radius-lg">
-        {{-- Navbar --}}
-        @include('admin.layouts.navbar')
+  <main class="main-content position-relative border-radius-lg ">
 
-        <div class="container-fluid py-4">
-            @yield('content')
-        </div>
+    {{-- NAVBAR --}}
+    @include('admin.layouts.navbar')
 
-        {{-- Footer --}}
-        @include('admin.layouts.footer')
-    </main>
+    {{-- CONTENT --}}
+    <div class="container-fluid py-4">
+        @yield('content')
+    </div>
 
-    {{-- Argon JS --}}
-    <script src="{{ asset('asset-admin/js/core/popper.min.js') }}"></script>
-    <script src="{{ asset('asset-admin/js/core/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('asset-admin/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
+    {{-- FOOTER --}}
+    @include('admin.layouts.footer')
+  </main>
+
+  <!-- Argon JS -->
+  <script src="{{ asset('asset-admin/js/core/popper.min.js') }}"></script>
+  <script src="{{ asset('asset-admin/js/core/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('asset-admin/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
+  <script src="{{ asset('asset-admin/js/plugins/chartjs.min.js') }}"></script>
+    @yield('scripts')
 </body>
 </html>

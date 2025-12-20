@@ -1,12 +1,12 @@
-<!-- <?php
+<?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Donation;
 
-class DashboardController extends Controller
+class AdminDashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,22 +14,22 @@ class DashboardController extends Controller
     public function index()
     {
         //
-        $totalDonasi = Donation::where('status', 'approved')->sum('amount');
-        $donasiPending = Donation::where('status', 'pending')->count();
-        $donasiRejected = Donation::where('status', 'rejected')->count();
-        $totalTransaksi = Donation::count();
-        $totalDonatur = User::whereIn('role', ['guest', 'staff'])->count();
+        // Total donasi per bulan
+    $donationsPerMonth = Donation::select(
+        DB::raw('MONTH(created_at) as month'),
+        DB::raw('SUM(amount) as total')
+    )
+    ->where('status', 'approved')
+    ->groupBy('month')
+    ->orderBy('month')
+    ->get();
 
-        return view('admin.dashboard', compact(
-            'totalDonasi',
-            'donasiPending',
-            'donasiRejected',
-            'totalTransaksi',
-            'totalDonatur'
-            
-        ));
+    return view('admin.dashboard', [
+        'totalDonation' => Donation::where('status','approved')->sum('amount'),
+        'totalUser' => \App\Models\User::count(),
+        'donationsPerMonth' => $donationsPerMonth,
+    ]);
 
-        
     }
 
     /**
@@ -79,4 +79,4 @@ class DashboardController extends Controller
     {
         //
     }
-} -->
+}

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DonationController as AdminDonationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -69,4 +70,28 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])
             ->name('admin.dashboard');
     });
+
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])
+            ->name('dashboard');
+
+    });
+
+use App\Http\Controllers\Admin\StaffController;
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::resource('staff', StaffController::class);
+});
+
+
+use App\Http\Controllers\Admin\CategoryController;
+
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::resource('categories', CategoryController::class);
+});
+
 
