@@ -3,12 +3,22 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\ActivityLog;
 
 return new class extends Migration
 {
     /**
      * Run the migrations.
      */
+    public function index()
+    {
+        $logs = ActivityLog::with('user')
+            ->latest()
+            ->paginate(10);
+
+        return view('admin.activity-log.index', compact('logs'));
+    }
+    
     public function up(): void
     {
         Schema::create('jobs', function (Blueprint $table) {

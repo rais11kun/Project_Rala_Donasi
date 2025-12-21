@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 
 namespace App\Http\Controllers\Admin;
 use App\Models\User;
@@ -79,4 +79,4 @@ class DashboardController extends Controller
     {
         //
     }
-} -->
+}

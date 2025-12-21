@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Donation;
+use App\Models\Category;
+
 
 class AdminDashboardController extends Controller
 {
@@ -14,21 +16,26 @@ class AdminDashboardController extends Controller
     public function index()
     {
         //
-        // Total donasi per bulan
-    $donationsPerMonth = Donation::select(
-        DB::raw('MONTH(created_at) as month'),
-        DB::raw('SUM(amount) as total')
-    )
-    ->where('status', 'approved')
-    ->groupBy('month')
-    ->orderBy('month')
-    ->get();
+        // SUMMARY
+        $totalDonations   = Donation::count();
+        $totalAmount      = Donation::where('status', 'approved')->sum('amount');
+        $pendingDonations = Donation::where('status', 'pending')->count();
+        $approvedDonations = Donation::where('status', 'approved')->count();
 
-    return view('admin.dashboard', [
-        'totalDonation' => Donation::where('status','approved')->sum('amount'),
-        'totalUser' => \App\Models\User::count(),
-        'donationsPerMonth' => $donationsPerMonth,
-    ]);
+        // CHART DONASI PER KATEGORI
+        $donationsByCategory = Category::withCount([
+            'donations as total_amount' => function ($query) {
+                $query->select(DB::raw('SUM(amount)'));
+            }
+        ])->get();
+
+        return view('admin.dashboard', compact(
+            'totalDonations',
+            'totalAmount',
+            'pendingDonations',
+            'approvedDonations',
+            'donationsByCategory'
+        ));
 
     }
 

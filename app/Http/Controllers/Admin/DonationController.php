@@ -5,17 +5,25 @@ use App\Models\Donation;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
-
+use App\Models\ActivityLog;
 class DonationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request) 
     {
         //
-        $donations = Donation::with('user')->latest()->get();
-        return view('admin.donations.index', compact('donations'));
+        $categories = Category::all();
+
+    $donations = Donation::with(['user', 'category'])
+        ->when($request->category_id, function ($query) use ($request) {
+            $query->where('category_id', $request->category_id);
+        })
+        ->latest()
+        ->get();
+
+    return view('admin.donations.index', compact('donations', 'categories'));
     }
 
     /**
@@ -25,19 +33,33 @@ class DonationController extends Controller
     public function approve(Donation $donation)
     {
         $donation->update([
-            'status' => 'approved'
-        ]);
+        'status' => 'approved'
+    ]);
 
-        return back()->with('success', 'Donasi disetujui');
+        ActivityLog::create([
+        'user_id'  => auth()->id(),   // ⬅️ WAJIB
+        'action'   => 'approve',
+        'model'    => 'Donation',
+        'model_id' => $donation->id,
+    ]);
+
+    return back()->with('success', 'Donasi berhasil di-approve');
     }
 
     public function reject(Donation $donation)
     {
         $donation->update([
-            'status' => 'rejected'
-        ]);
+        'status' => 'rejected'
+    ]);
 
-        return back()->with('success', 'Donasi ditolak');
+    ActivityLog::create([
+        'user_id'  => auth()->id(),
+        'action'   => 'reject',
+        'model'    => 'Donation',
+        'model_id' => $donation->id,
+    ]);
+
+    return back()->with('success', 'Donasi berhasil di-reject');
     }
 
     public function create()

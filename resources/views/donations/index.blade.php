@@ -2,22 +2,41 @@
     <div class="container py-5">
         <h2>Daftar Donasi</h2>
 
-        <table border="1" cellpadding="10">
-            <tr>
-                <th>User</th>
-                <th>Judul</th>
-                <th>Jumlah</th>
-                <th>Status</th>
-            </tr>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Kategori</th> {{-- 🔥 --}}
+                    <th>Judul</th>
+                    <th>Jumlah</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($donations as $donation)
+                    <tr>
+                        <td>{{ $donation->user->name }}</td>
 
-            @foreach($donations as $donasi)
-            <tr>
-                <td>{{ $donasi->user->name ?? 'Guest' }}</td>
-                <td>{{ $donasi->title }}</td>
-                <td>Rp {{ number_format($donasi->amount) }}</td>
-                <td>{{ $donasi->status }}</td>
-            </tr>
-            @endforeach
+                        <td>
+                            {{ $donation->category->name ?? '-' }}
+                        </td>
+
+                        <td>{{ $donation->title }}</td>
+                        <td>Rp {{ number_format($donation->amount) }}</td>
+                        <td>
+                            <span class="badge bg-warning">
+                                {{ $donation->status }}
+                            </span>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            Belum ada donasi
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
         </table>
     </div>
 </x-app-layout>

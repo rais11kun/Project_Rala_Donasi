@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -34,10 +35,6 @@ Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', function () {
     return 'Dashboard Staff';
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/donasi/create', [DonationController::class, 'create'])->name('donasi.create');
-    Route::post('/donasi', [DonationController::class, 'store'])->name('donasi.store');
-});
 
 Route::middleware(['auth', 'role:admin,staff'])->group(function () {
     Route::get('/admin/donasi', [DonationController::class, 'index'])->name('donasi.index');
@@ -54,22 +51,22 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         ->name('admin.donations.reject');
 });
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('admin.dashboard');
-});
+// Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+//     Route::get('/dashboard', [DashboardController::class, 'index'])
+//         ->name('admin.dashboard');
+// });
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardAdminController::class, 'index'])
-        ->name('admin.dashboard');
-});
+// Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+//     Route::get('/dashboard', [DashboardAdminController::class, 'index'])
+//         ->name('admin.dashboard');
+// });
 
-Route::middleware(['auth', 'role:admin'])
-    ->prefix('admin')
-    ->group(function () {
-        Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])
-            ->name('admin.dashboard');
-    });
+// Route::middleware(['auth', 'role:admin'])
+//     ->prefix('admin')
+//     ->group(function () {
+//         Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])
+//             ->name('admin.dashboard');
+//     });
 
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
@@ -90,8 +87,33 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
 use App\Http\Controllers\Admin\CategoryController;
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::resource('categories', CategoryController::class);
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::resource('categories', CategoryController::class);
+    });
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/donasi/create', [DonationController::class, 'create'])
+        ->name('donasi.create');
+
+    Route::post('/donasi', [DonationController::class, 'store'])
+        ->name('donasi.store');
 });
+
+Route::middleware(['auth','role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        Route::get('/activity-log', [\App\Http\Controllers\Admin\ActivityLogController::class, 'index'])
+            ->name('activity-log.index');
+    });
+
+    
+
 
 

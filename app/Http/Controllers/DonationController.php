@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Donation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Category;
 class DonationController extends Controller
 {
     /**
@@ -23,7 +23,8 @@ class DonationController extends Controller
     public function create()
     {
         //
-        return view('donations.create');
+        $categories = Category::all();
+        return view('donations.create', compact('categories'));
     }
 
     /**
@@ -48,6 +49,7 @@ class DonationController extends Controller
             \App\Models\Donation::create([
             'user_id' => auth()->id(),
             'title'   => $validated['title'],
+            'category_id' => $request->category_id,
             'amount'  => $validated['amount'],
             'note'    => $validated['note'] ?? null,
             'proof_image' => $path,

@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\User;
-use App\Models\Donation;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ActivityLog;
 
-class DashboardAdminController extends Controller
+class ActivityLogController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,12 +14,11 @@ class DashboardAdminController extends Controller
     public function index()
     {
         //
-        return view('admin.dashboard', [
-            'totalDonasi' => Donation::where('status', 'approved')->sum('amount'),
-            'jumlahDonasi' => Donation::count(),
-            'donasiPending' => Donation::where('status', 'pending')->count(),
-            'totalUser' => User::count(),
-        ]);
+        $logs = ActivityLog::with('user')
+            ->latest()
+            ->paginate(10);
+
+        return view('admin.activity-log.index', compact('logs'));
     }
 
     /**
@@ -28,6 +27,7 @@ class DashboardAdminController extends Controller
     public function create()
     {
         //
+        
     }
 
     /**

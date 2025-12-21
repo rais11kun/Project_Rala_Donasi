@@ -38,7 +38,7 @@ class CategoryController extends Controller
 
         Category::create($request->all());
 
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil ditambahkan');
+        return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil ditambahkan');
     }
 
     /**
@@ -64,12 +64,15 @@ class CategoryController extends Controller
     {
         //
         $request->validate([
-            'name' => 'required'
-        ]);
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+    ]);
 
-        $category->update($request->all());
+    $category->update($request->all());
 
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil diupdate');
+    return redirect()
+        ->route('admin.categories.index')
+        ->with('success', 'Kategori berhasil diperbarui');
     }
 
     /**
