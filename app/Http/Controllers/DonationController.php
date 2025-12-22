@@ -59,6 +59,16 @@ class DonationController extends Controller
         return redirect()->back()->with('success', 'Donasi berhasil dikirim');
     }
 
+        public function showByCategory($category)
+    {
+        $allowed = ['food', 'health', 'education'];
+    if (!in_array($category, $allowed)) {
+        abort(404);
+    }
+
+    return view('donations.category', compact('category'));
+    }
+
     /**
      * Display the specified resource.
      */

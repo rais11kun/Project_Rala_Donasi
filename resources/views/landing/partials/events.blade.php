@@ -1,51 +1,61 @@
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show container mt-4" role="alert" style="border-radius: 10px;">
+        <i class="fas fa-check-circle me-2"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <section id="event" class="container-xxl py-5">
-<div class="container-fluid py-5">
-        <div class="container">
-            <div class="text-center mx-auto wow fadeIn" data-wow-delay="0.1s" style="max-width: 500px;">
-                <p class="section-title bg-white text-center text-primary px-3">Events</p>
-                <h1 class="display-6 mb-4">Be a Part of a Global Movement</h1>
+    </section>
+<section id="event" class="container-xxl py-5">
+<div class="container py-5">
+        <div class="text-center mx-auto wow fadeIn" data-wow-delay="0.1s" style="max-width: 600px;">
+            <div class="d-inline-flex align-items-center mb-3">
+                <div style="width: 40px; height: 2px; background-color: #fbb034;"></div>
+                <p class="text-uppercase fw-bold mb-0 mx-3" style="color: #fbb034; letter-spacing: 2px;">Event</p>
+                <div style="width: 40px; height: 2px; background-color: #fbb034;"></div>
             </div>
-            <div class="row g-4">
-                <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.1s">
-                    <div class="event-item h-100 p-4">
-                        <img class="img-fluid w-100 mb-4" src="{{ asset('asset-landing/img/event-1.jpg') }}" alt="">
-                        <a href="#!" class="h3 d-inline-block">Education Program</a>
-                        <p>Through your donations and volunteer work, we spread kindness and support to children.</p>
-                        <div class="bg-light p-4">
-                            <p class="mb-1"><i class="fa fa-clock text-primary me-2"></i>10:00 AM - 18:00 PM</p>
-                            <p class="mb-1"><i class="fa fa-calendar-alt text-primary me-2"></i>Jan 01 - Jan 10</p>
-                            <p class="mb-0"><i class="fa fa-map-marker-alt text-primary me-2"></i>123 Street, New York,
-                                USA</p>
-                        </div>
+            <h1 class="display-6 fw-bold">Be a Part of a Global Movement</h1>
+        </div>
+        <div class="row g-4">
+            @php
+                $events = [
+                    ['id' => 1, 'title' => 'Education Program', 'img' => 'event-1.jpg', 'cat' => 'FIELD WORK', 'reg' => '12/20'],
+                    ['id' => 2, 'title' => 'Health Program', 'img' => 'event-2.jpg', 'cat' => 'HEALTH CARE', 'reg' => '8/15'],
+                    ['id' => 3, 'title' => 'Awareness Program', 'img' => 'event-3.jpg', 'cat' => 'CAMPAIGN', 'reg' => '5/10'],
+                ];
+            @endphp
+
+            @foreach($events as $event)
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                    <div class="position-relative">
+                        <img src="{{ asset('asset-landing/img/' . $event['img']) }}" class="img-fluid w-100" style="height: 220px; object-fit: cover;">
+                        <span class="position-absolute top-0 start-0 m-3 px-3 py-1 fw-bold text-white small" 
+                              style="background: #126d61; border-radius: 5px;">{{ $event['cat'] }}</span>
                     </div>
-                </div>
-                <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.3s">
-                    <div class="event-item h-100 p-4">
-                        <img class="img-fluid w-100 mb-4" src="{{ asset('asset-landing/img/event-2.jpg') }}" alt="">
-                        <a href="#!" class="h3 d-inline-block">Awareness Program</a>
-                        <p>Through your donations and volunteer work, we spread kindness and support to children.</p>
-                        <div class="bg-light p-4">
-                            <p class="mb-1"><i class="fa fa-clock text-primary me-2"></i>10:00 AM - 18:00 PM</p>
-                            <p class="mb-1"><i class="fa fa-calendar-alt text-primary me-2"></i>Jan 01 - Jan 10</p>
-                            <p class="mb-0"><i class="fa fa-map-marker-alt text-primary me-2"></i>123 Street, New York,
-                                USA</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.5s">
-                    <div class="event-item h-100 p-4">
-                        <img class="img-fluid w-100 mb-4" src="{{ asset('asset-landing/img/event-3.jpg') }}" alt="">
-                        <a href="#!" class="h3 d-inline-block">Health Care Program</a>
-                        <p>Through your donations and volunteer work, we spread kindness and support to children.</p>
-                        <div class="bg-light p-4">
-                            <p class="mb-1"><i class="fa fa-clock text-primary me-2"></i>10:00 AM - 18:00 PM</p>
-                            <p class="mb-1"><i class="fa fa-calendar-alt text-primary me-2"></i>Jan 01 - Jan 10</p>
-                            <p class="mb-0"><i class="fa fa-map-marker-alt text-primary me-2"></i>123 Street, New York,
-                                USA</p>
+
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h4 class="fw-bold mb-3">{{ $event['title'] }}</h4>
+                        <p class="text-muted small mb-2">Membantu anak-anak di pedalaman mendapatkan akses buku dan alat tulis layak.</p>
+                        
+                        <p class="small fw-bold mb-4" style="color: #126d61;">{{ $event['reg'] }} Relawan Terdaftar</p>
+
+                        <div class="mt-auto d-grid gap-2">
+                            <a href="{{ route('relawan.daftar', $event['id']) }}" class="btn fw-bold text-white" 
+                               style="background-color: #fbb034; border-radius: 8px; padding: 10px; border: none; text-decoration: none; text-align: center;">
+                                Daftar Relawan
+                            </a>
+                            
+                            <a href="{{ route('donasi.create') }}" class="btn fw-bold" 
+                               style="border: 1px solid #126d61; color: #126d61; border-radius: 8px; padding: 10px; background: transparent; text-decoration: none; text-align: center;">
+                                Donasi Sekarang
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
-    </section>
+</section>

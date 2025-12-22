@@ -1,4 +1,4 @@
-<section id="stats" class="container-fluid py-5">
+<!-- <section id="stats" class="container-fluid py-5">
     <div class="container-fluid py-5">
         <div class="container">
             <div class="row g-5 align-items-center">
@@ -56,4 +56,4 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->

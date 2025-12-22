@@ -1,4 +1,4 @@
-<section id="cta" class="container-xxl py-5">
+<!-- <section id="cta" class="container-xxl py-5">
 <div class="container-fluid donate py-5">
         <div class="container">
             <div class="row g-0">
@@ -58,4 +58,4 @@
             </div>
         </div>
     </div>
-    </section>
+    </section> -->

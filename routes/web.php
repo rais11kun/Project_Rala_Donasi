@@ -6,7 +6,7 @@ use App\Http\Controllers\DonationController;
 use App\Http\Controllers\Admin\DonationController as AdminDonationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DashboardAdminController;
-
+use App\Http\Controllers\EventController;
 
 
 Route::get('/', function () {
@@ -117,6 +117,16 @@ Route::middleware(['auth','role:admin'])
     return view('staff.dashboard');
 })->name('staff.dashboard');
     
+Route::get('/donasi/{category}', [DonationController::class, 'showByCategory'])->name('donasi.category');
 
+// --- ALUR DONASI ---
+Route::get('/donasi', [DonationController::class, 'index'])->name('donasi.index');
+// Memproses data donasi (setelah klik 'Selanjutnya')
+Route::post('/donasi/proses', [DonationController::class, 'proses'])->name('donasi.proses');
 
+// --- ALUR RELAWAN ---
+// Menampilkan halaman formulir pendaftaran relawan
+Route::get('/relawan/daftar/{event_id}', [EventController::class, 'daftarRelawan'])->name('relawan.daftar');
+// Memproses pendaftaran relawan
+Route::post('/relawan/simpan', [EventController::class, 'store'])->name('relawan.simpan');
 

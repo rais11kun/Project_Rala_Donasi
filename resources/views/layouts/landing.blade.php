@@ -17,12 +17,10 @@
     @include('landing.partials.hero')
     @include('landing.partials.about')
     @include('landing.partials.categories')
-    @include('landing.partials.cta')
-    @include('landing.partials.stats')
     @include('landing.partials.events')
-
+    @include('landing.partials.contact')
     {{-- KONTEN --}}
-    @yield('content')
+    <!-- @yield('content') -->
 
     <!-- JS TEMPLATE -->
     <script src="{{ asset('asset-landing/js/bootstrap.bundle.min.js') }}"></script>
