@@ -113,6 +113,9 @@ Route::middleware(['auth','role:admin'])
             ->name('activity-log.index');
     });
 
+    Route::get('/staff/dashboard', function () {
+    return view('staff.dashboard');
+})->name('staff.dashboard');
     
 
 
