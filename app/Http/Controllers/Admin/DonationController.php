@@ -36,30 +36,34 @@ class DonationController extends Controller
         'status' => 'approved'
     ]);
 
-        ActivityLog::create([
-        'user_id'  => auth()->id(),   // ⬅️ WAJIB
-        'action'   => 'approve',
+    ActivityLog::create([
+        'user_id'  => $donation->user_id,
+        'admin_id' => auth()->id(),
+        'action'   => 'approve donation',
         'model'    => 'Donation',
         'model_id' => $donation->id,
+        'description' => 'Donasi "' . $donation->title . '" disetujui oleh admin',
     ]);
 
-    return back()->with('success', 'Donasi berhasil di-approve');
+    return back()->with('success', 'Donasi berhasil disetujui');
     }
 
     public function reject(Donation $donation)
     {
         $donation->update([
-        'status' => 'rejected'
-    ]);
+            'status' => 'rejected'
+        ]);
 
-    ActivityLog::create([
-        'user_id'  => auth()->id(),
-        'action'   => 'reject',
-        'model'    => 'Donation',
-        'model_id' => $donation->id,
-    ]);
+        ActivityLog::create([
+            'user_id'  => $donation->user_id,
+            'admin_id' => auth()->id(),
+            'action'   => 'reject donation',
+            'model'    => 'Donation',
+            'model_id' => $donation->id,
+             'description' => 'Donasi "' . $donation->title . '" ditolak oleh admin',
+        ]);
 
-    return back()->with('success', 'Donasi berhasil di-reject');
+        return back()->with('success', 'Donasi berhasil ditolak');
     }
 
     public function create()

@@ -91,9 +91,10 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-
         Route::resource('categories', CategoryController::class);
     });
+
+
 
 
 Route::middleware(['auth'])->group(function () {

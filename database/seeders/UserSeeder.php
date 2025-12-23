@@ -15,20 +15,31 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         //
-        // ADMIN
-        User::create([
+        User::updateOrCreate(
+        ['email' => 'admin@donasi.test'],
+        [
             'name' => 'Admin Utama',
-            'email' => 'admin@donasi.test',
             'password' => Hash::make('password'),
             'role' => 'admin',
-        ]);
+        ]
+    );
 
-        // STAFF
-        User::create([
-            'name' => 'Staff Operasional',
-            'email' => 'staff@donasi.test',
+    User::updateOrCreate(
+        ['email' => 'staff@donasi.test'],
+        [
+            'name' => 'Staff Donasi',
             'password' => Hash::make('password'),
             'role' => 'staff',
-        ]);
+        ]
+    );
+
+    User::updateOrCreate(
+        ['email' => 'guest@donasi.test'],
+        [
+            'name' => 'Guest User',
+            'password' => Hash::make('password'),
+            'role' => 'guest',
+        ]
+    );
     }
 }

@@ -32,13 +32,16 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
-            'name' => 'required'
-        ]);
+         $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+    ]);
 
-        Category::create($request->all());
+    Category::create($request->only('name', 'description'));
 
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil ditambahkan');
+    return redirect()
+        ->route('admin.categories.index')
+        ->with('success', 'Kategori berhasil ditambahkan');
     }
 
     /**
@@ -68,7 +71,7 @@ class CategoryController extends Controller
         'description' => 'nullable|string',
     ]);
 
-    $category->update($request->all());
+    $category->update($request->only('name', 'description'));
 
     return redirect()
         ->route('admin.categories.index')

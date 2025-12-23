@@ -11,14 +11,22 @@ class ActivityLog extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'admin_id',
         'action',
         'model',
         'model_id',
+        'description',
     ];
 
     public function admin()
     {
         return $this->belongsTo(User::class, 'admin_id');
+    }
+
+    // User terkait (opsional)
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

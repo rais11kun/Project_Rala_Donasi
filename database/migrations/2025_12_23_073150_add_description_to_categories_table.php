@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('activity_logs', function (Blueprint $table) {
+        Schema::table('categories', function (Blueprint $table) {
             //
-            $table->string('model')->after('action');
-        $table->unsignedBigInteger('model_id')->after('model');
+            $table->text('description')->nullable()->after('name');
         });
     }
 
@@ -23,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('activity_logs', function (Blueprint $table) {
+        Schema::table('categories', function (Blueprint $table) {
             //
-            $table->dropColumn(['model', 'model_id']);
+            $table->dropColumn('description');
         });
     }
 };
