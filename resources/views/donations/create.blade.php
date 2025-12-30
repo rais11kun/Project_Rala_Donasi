@@ -6,6 +6,7 @@
     <title>Kirim Donasi - Bersama Untuk Hari Esok</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
     <style>
         :root {
@@ -39,32 +40,19 @@
             padding: 40px;
         }
 
-        .form-wrapper { width: 100%; max-width: 500px; }
+        .form-wrapper { width: 100%; max-width: 550px; }
 
         .accent-line { width: 60px; height: 4px; background: var(--primary-orange); margin-bottom: 20px; border-radius: 2px; }
 
-        /* Label Design Menarik */
         .form-label {
-            font-weight: 700;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--primary-teal);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .form-label::before {
-            content: ""; width: 5px; height: 5px; background: var(--primary-orange); border-radius: 50%; display: inline-block;
+            font-weight: 700; font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 1px; color: var(--primary-teal); display: flex;
+            align-items: center; gap: 8px; margin-bottom: 10px;
         }
 
         .form-control, .form-select {
             padding: 12px 15px; border-radius: 12px; border: 1px solid #eee; background-color: #fcfcfc; transition: 0.3s;
         }
-
-        .form-control:focus { box-shadow: 0 0 0 4px rgba(251, 176, 52, 0.1); border-color: var(--primary-orange); background: #fff; }
 
         .btn-submit {
             background-color: var(--primary-orange); border: none; padding: 16px; border-radius: 12px;
@@ -72,19 +60,11 @@
             text-transform: uppercase; letter-spacing: 1.5px; margin-top: 10px;
         }
 
-        .btn-submit:hover { background-color: #e59f2d; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(251, 176, 52, 0.25); }
+        .btn-submit:hover { background-color: #e59f2d; transform: translateY(-2px); }
 
-        /* Desain Notifikasi Sukses */
-        .alert-success-custom {
-            background-color: #e7f3f2;
-            border: none;
-            border-left: 5px solid var(--primary-teal);
-            color: var(--primary-teal);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-        }
+        /* Step Logic */
+        #step-2 { display: none; }
+        .qris-box { border: 1px solid #eee; border-radius: 20px; padding: 20px; text-align: center; background: #fff; }
 
         @media (max-width: 992px) { .left-side { display: none; } }
     </style>
@@ -103,75 +83,117 @@
     <div class="right-side">
         <div class="form-wrapper">
             
-            @if (session('success'))
-                <div class="alert alert-success-custom shadow-sm mb-4 animate__animated animate__fadeIn">
-                    <div class="me-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <h6 class="mb-0 fw-bold">Donasi Berhasil Terkirim!</h6>
-                        <small>Terima kasih atas kebaikan Anda. Tim kami akan segera memprosesnya.</small>
-                    </div>
-                </div>
-            @endif
-
             <div class="accent-line"></div>
-            <h2 class="fw-bold mb-4">Formulir Donasi</h2>
+            <h2 class="fw-bold mb-4" id="form-title">Formulir Donasi</h2>
 
-            @if ($errors->any())
-                <div class="alert alert-danger border-0 shadow-sm mb-4 small">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('donasi.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('donasi.store') }}" enctype="multipart/form-data" id="donation-form">
                 @csrf
 
-                <div class="mb-4">
-                    <label class="form-label">Program Donasi</label>
-                    <input type="text" name="title" class="form-control" placeholder="Contoh: Bantuan Pendidikan Anak" required>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label">Pilih Kategori</label>
-                        <select name="category_id" class="form-select" required>
-                            <option value="" disabled selected>Pilih...</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
+                <div id="step-1">
+                    <div class="mb-4">
+                        <label class="form-label">Program Donasi</label>
+                        <input type="text" name="title" id="input_title" class="form-control" placeholder="Contoh: Bantuan Pendidikan" required>
                     </div>
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label">Jumlah (Rp)</label>
-                        <input type="number" name="amount" class="form-control" placeholder="0" required>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">Pilih Kategori</label>
+                            <select name="category_id" class="form-select" required>
+                                <option value="" disabled selected>Pilih...</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label">Jumlah (Rp)</label>
+                            <input type="number" name="amount" id="input_amount" class="form-control" placeholder="0" required>
+                        </div>
                     </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Catatan / Doa Baik</label>
+                        <textarea name="note" class="form-control" rows="3" placeholder="Tuliskan harapan Anda..."></textarea>
+                    </div>
+
+                    <button type="button" class="btn btn-submit shadow-sm" onclick="goToStep2()">
+                        Lanjut ke Pembayaran
+                    </button>
                 </div>
 
-                <div class="mb-4">
-                    <label class="form-label">Catatan / Doa Baik</label>
-                    <textarea name="note" class="form-control" rows="3" placeholder="Tuliskan harapan Anda..."></textarea>
-                </div>
+                <div id="step-2">
+                    <div class="text-center mb-4">
+                        <p class="text-muted mb-1">Silakan scan & bayar tepat sejumlah:</p>
+                        <h2 class="fw-800" id="display_amount" style="font-weight: 800; color: var(--primary-teal);"></h2>
+                    </div>
 
-                <div class="mb-5">
-                    <label class="form-label">Bukti Transfer</label>
-                    <input type="file" name="proof_image" class="form-control" accept="image/*" style="border: 2px dashed #ddd; background: #fafafa;">
-                </div>
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-5">
+                            <div class="qris-box shadow-sm border">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_QRIS.svg" height="20" class="mb-2">
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=QRIS-DONASI-AYOBANTU" class="img-fluid mb-2">
+                                <small class="text-muted d-block" style="font-size: 10px;">OVO | GOPAY | DANA | LINKAJA</small>
+                            </div>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="mb-3">
+                                <label class="form-label">Unggah Bukti Transfer</label>
+                                <input type="file" name="proof_image" class="form-control" accept="image/*" required style="border: 2px dashed #fbb034; background: #fffaf0;">
+                                <small class="text-muted mt-2 d-block">Mohon unggah screenshot/foto bukti bayar Anda.</small>
+                            </div>
+                            <div class="p-3 bg-light rounded-3">
+                                <small class="fw-bold d-block mb-1">Cara Bayar:</small>
+                                <ul class="small text-muted ps-3 mb-0">
+                                    <li>Scan QRIS dengan aplikasi e-wallet</li>
+                                    <li>Pastikan nominal sesuai</li>
+                                    <li>Simpan bukti bayar & unggah di sini</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
-                <button type="submit" class="btn btn-submit shadow-sm">
-                    Konfirmasi Donasi
-                </button>
+                    <button type="submit" class="btn btn-submit shadow-sm">
+                        Konfirmasi & Kirim Donasi
+                    </button>
+                    <button type="button" class="btn btn-link w-100 mt-2 text-muted text-decoration-none small" onclick="goToStep1()">
+                        ← Ubah Data Donasi
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function goToStep2() {
+        const title = document.getElementById('input_title').value;
+        const amount = document.getElementById('input_amount').value;
+
+        if(!title || !amount || amount < 1000) {
+            alert('Mohon lengkapi data dan isi nominal minimal Rp 1.000');
+            return;
+        }
+
+        // Format angka ke Rupiah
+        const formattedAmount = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            maximumFractionDigits: 0
+        }).format(amount);
+
+        // Update UI
+        document.getElementById('display_amount').innerText = formattedAmount;
+        document.getElementById('form-title').innerText = "Konfirmasi Pembayaran";
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'block';
+    }
+
+    function goToStep1() {
+        document.getElementById('form-title').innerText = "Formulir Donasi";
+        document.getElementById('step-1').style.display = 'block';
+        document.getElementById('step-2').style.display = 'none';
+    }
+</script>
+
 </body>
 </html>

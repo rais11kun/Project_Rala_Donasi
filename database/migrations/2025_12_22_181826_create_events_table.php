@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('cat'); // Kolom untuk kategori (FIELD WORK, dll)
+            $table->string('reg'); // Kolom untuk pendaftar (12/20, dll)
+            $table->string('img'); // Kolom untuk nama file gambar
             $table->timestamps();
         });
     }

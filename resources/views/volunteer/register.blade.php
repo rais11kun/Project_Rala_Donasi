@@ -54,41 +54,30 @@
                 <p class="text-muted small">Isi data diri Anda untuk bergabung dalam gerakan kebaikan ini.</p>
             </div>
 
-            <form action="{{ route('relawan.simpan') }}" method="POST">
-                @csrf
-                <input type="hidden" name="event_id" value="{{ $id ?? '' }}">
+            <form action="{{ route('volunteer.register') }}" method="POST">
+    @csrf
+    
+    <input type="hidden" name="event_id" value="{{ $event->id }}">
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold small">Nama Lengkap</label>
-                    <input type="text" name="nama" class="form-control py-2" 
-                           placeholder="Masukkan nama sesuai KTP" required style="border-radius: 10px;">
-                </div>
+    <div class="mb-3 text-start">
+        <label class="fw-bold mb-2">Nama Lengkap</label>
+        <input type="text" name="name" class="form-control" required>
+    </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold small">Nomor WhatsApp</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light" style="border-radius: 10px 0 0 10px;">+62</span>
-                        <input type="tel" name="whatsapp" class="form-control py-2" 
-                               placeholder="8123456789" required style="border-radius: 0 10px 10px 0;">
-                    </div>
-                </div>
+    <div class="mb-3 text-start">
+        <label class="fw-bold mb-2">Nomor WhatsApp</label>
+        <input type="text" name="whatsapp" class="form-control" required>
+    </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-bold small">Mengapa Anda ingin bergabung?</label>
-                    <textarea name="alasan" class="form-control" rows="3" 
-                              placeholder="Ceritakan singkat motivasi Anda..." style="border-radius: 10px;"></textarea>
-                </div>
+    <div class="mb-4 text-start">
+        <label class="fw-bold mb-2">Mengapa Anda ingin bergabung?</label>
+        <textarea name="motivation" class="form-control" rows="4" required></textarea>
+    </div>
 
-                <div class="d-grid mb-3">
-                    <button type="submit" class="btn btn-primary-custom fw-bold py-3" style="border-radius: 12px; font-size: 1rem;">
-                        Kirim Pendaftaran
-                    </button>
-                </div>
-
-                <p class="text-center text-muted" style="font-size: 0.75rem;">
-                    Dengan mendaftar, Anda setuju untuk dihubungi oleh tim koordinator GIVEHOPE melalui WhatsApp atau Email.
-                </p>
-            </form>
+    <button type="submit" class="btn btn-warning w-100 fw-bold py-3 text-white">
+        Kirim Pendaftaran
+    </button>
+</form>
         </div>
     </div>
 

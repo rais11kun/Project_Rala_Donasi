@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\DonationController as AdminDonationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\VolunteerController;
 
 
 Route::get('/', function () {
@@ -125,9 +127,26 @@ Route::get('/donasi', [DonationController::class, 'index'])->name('donasi.index'
 // Memproses data donasi (setelah klik 'Selanjutnya')
 Route::post('/donasi/proses', [DonationController::class, 'proses'])->name('donasi.proses');
 
-// --- ALUR RELAWAN ---
-// Menampilkan halaman formulir pendaftaran relawan
-Route::get('/relawan/daftar/{event_id}', [EventController::class, 'daftarRelawan'])->name('relawan.daftar');
-// Memproses pendaftaran relawan
-Route::post('/relawan/simpan', [EventController::class, 'store'])->name('relawan.simpan');
+// // --- ALUR RELAWAN ---
+// // Menampilkan halaman formulir pendaftaran relawan
+// Route::get('/relawan/daftar/{event_id}', [EventController::class, 'daftarRelawan'])->name('relawan.daftar');
+// // Memproses pendaftaran relawan
+// Route::post('/relawan/simpan', [EventController::class, 'store'])->name('relawan.simpan');
 
+// Route untuk menampilkan halaman sukses/konfirmasi
+Route::get('/donasi/konfirmasi/{id}', [DonationController::class, 'confirmation'])->name('donasi.confirmation');
+
+// Route untuk memproses form
+Route::post('/donasi/store', [DonationController::class, 'store'])->name('donasi.store');
+
+// Ini untuk menampilkan landing page
+// Route::get('/', function () { return view('landing'); }); 
+
+// TAMBAHKAN INI untuk menangani pengiriman pesan
+Route::post('/contact-send', [ContactController::class, 'store'])->name('contact.send');
+
+// Pastikan baris ini mengarah ke method 'create'
+Route::get('/relawan/daftar/{id}', [VolunteerController::class, 'create'])->name('relawan.daftar');
+
+// Pastikan baris ini untuk menyimpan data
+Route::post('/volunteer/register', [VolunteerController::class, 'store'])->name('volunteer.register');

@@ -8,10 +8,5 @@ class Volunteer extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'event_id',
-        'nama',
-        'whatsapp',
-        'alasan'
-    ];
+    protected $guarded = [];
 }

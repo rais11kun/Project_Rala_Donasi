@@ -46,7 +46,7 @@ class DonationController extends Controller
                             ->store('donation_proofs', 'public');
             }
 
-            \App\Models\Donation::create([
+            $donation= \App\Models\Donation::create([
             'user_id' => auth()->id(),
             'title'   => $validated['title'],
             'category_id' => $request->category_id,
@@ -56,7 +56,9 @@ class DonationController extends Controller
             'status'  => 'pending',
             ]);
 
-        return redirect()->back()->with('success', 'Donasi berhasil dikirim');
+        return redirect()->back()->with([
+        'success' => 'Donasi berhasil dibuat',
+        'donation' => $donation]);
     }
 
         public function showByCategory($category)
@@ -72,6 +74,15 @@ class DonationController extends Controller
     /**
      * Display the specified resource.
      */
+
+    // Contoh di DonationsController.php
+
+public function confirmation($id)
+{
+    $donation = \App\Models\Donation::findOrFail($id);
+
+    return view('donations.confirmation', compact('donation'));
+}
     public function show(string $id)
     {
         //

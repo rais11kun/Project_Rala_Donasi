@@ -28,8 +28,14 @@ class Donation extends Model
     }
 
     public function category()
-{
-    return $this->belongsTo(Category::class);
-}
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function campaign()
+    {
+        // Menghubungkan donasi ke tabel events (sebagai campaign) melalui kolom event_id
+        return $this->belongsTo(Event::class, 'event_id');
+    }
 
 }
