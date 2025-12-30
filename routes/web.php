@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\DashboardAdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\VolunteerController;
+use App\Http\Controllers\CampaignDonationController;
+use App\Http\Controllers\CategoryDonationController;
 
 
 Route::get('/', function () {
@@ -150,3 +152,31 @@ Route::get('/relawan/daftar/{id}', [VolunteerController::class, 'create'])->name
 
 // Pastikan baris ini untuk menyimpan data
 Route::post('/volunteer/register', [VolunteerController::class, 'store'])->name('volunteer.register');
+
+
+
+// // Rute untuk memilih nominal berdasarkan ID Kampanye
+// Route::get('/donasi/saluran/{id}', [CampaignDonationController::class, 'create'])->name('donasi.saluran');
+
+// // Rute untuk memproses simpan data
+// Route::post('/donasi/saluran/store', [CampaignDonationController::class, 'store'])->name('donasi.saluran.store');
+
+Route::get('/category-donation/create', [CategoryDonationController::class, 'create'])->name('category.donasi.create');
+Route::post('/category-donation/store', [CategoryDonationController::class, 'store'])->name('category.donasi.store');
+
+use App\Http\Controllers\staff\StaffDashboardController;
+use App\Http\Controllers\staff\CampaignDonationsController;
+use App\Http\Controllers\staff\StaffCategoryDonationController;
+use App\Http\Controllers\staff\StaffEventController;
+
+Route::prefix('staff')->name('staff.')->group(function () {
+    Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard');
+    // Daftarkan route yang error tadi di sini
+    Route::get('/donations', [CategoryDonationController::class, 'index'])->name('donations.index');
+    Route::resource('campaigns', CampaignDonationsController::class);
+    Route::get('/events', [EventController::class, 'index'])->name('events.index');
+    Route::get('/volunteers', [VolunteerController::class, 'index'])->name('volunteers.index');
+    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
+    Route::resource('donations', StaffCategoryDonationController::class);
+    Route::resource('events', StaffEventController::class);
+});

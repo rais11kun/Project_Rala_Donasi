@@ -10,6 +10,7 @@
         </div>
 
         <div class="row g-4">
+            {{-- Kategori: Food --}}
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.1s">
                 <div class="donation-item d-flex h-100 p-4 shadow-sm border-0" style="background: #fff; border-radius: 15px;">
                     <div class="donation-progress d-flex flex-column flex-shrink-0 text-center me-4">
@@ -30,14 +31,15 @@
                         </div>
                         <h4 class="mb-3 fw-bold">Healthy Food</h4>
                         <p class="text-muted small">Membantu menyediakan makanan bergizi bagi anak-anak di komunitas yang membutuhkan.</p>
-                        {{-- Tombol dengan parameter Kategori --}}
-                        <a href="{{ url('/donasi/food') }}" class="btn w-100 py-3 fw-bold" style="background-color: #fbb034; color: #1a1a1a; border-radius: 10px; border: none;">
+                        {{-- FIX: Menggunakan rute kategori dengan ID 1 --}}
+                        <a href="{{ route('category.donasi.create', ['category' => 'food', 'campaign_id' => 1]) }}" class="btn w-100 py-3 fw-bold" style="background-color: #fbb034; color: #1a1a1a; border-radius: 10px; border: none;">
                             Donate Now
                         </a>
                     </div>
                 </div>
             </div>
 
+            {{-- Kategori: Health --}}
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.3s">
                 <div class="donation-item d-flex h-100 p-4 shadow-sm border-0" style="background: #fff; border-radius: 15px;">
                     <div class="donation-progress d-flex flex-column flex-shrink-0 text-center me-4">
@@ -58,13 +60,15 @@
                         </div>
                         <h4 class="mb-3 fw-bold">Water Treatment</h4>
                         <p class="text-muted small">Menyediakan akses air bersih dan sistem sanitasi yang layak untuk kesehatan keluarga.</p>
-                        <a href="{{ url('/donasi/health') }}" class="btn w-100 py-3 fw-bold" style="background-color: #fbb034; color: #1a1a1a; border-radius: 10px; border: none;">
+                        {{-- FIX: Menggunakan rute kategori dengan ID 2 --}}
+                        <a href="{{ route('category.donasi.create', ['category' => 'health', 'campaign_id' => 2]) }}" class="btn w-100 py-3 fw-bold" style="background-color: #fbb034; color: #1a1a1a; border-radius: 10px; border: none;">
                             Donate Now
                         </a>
                     </div>
                 </div>
             </div>
 
+            {{-- Kategori: Education --}}
             <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.5s">
                 <div class="donation-item d-flex h-100 p-4 shadow-sm border-0" style="background: #fff; border-radius: 15px;">
                     <div class="donation-progress d-flex flex-column flex-shrink-0 text-center me-4">
@@ -85,7 +89,8 @@
                         </div>
                         <h4 class="mb-3 fw-bold">Education Support</h4>
                         <p class="text-muted small">Memberikan beasiswa dan peralatan sekolah untuk masa depan yang lebih cerah.</p>
-                        <a href="{{ url('/donasi/education') }}" class="btn w-100 py-3 fw-bold" style="background-color: #fbb034; color: #1a1a1a; border-radius: 10px; border: none;">
+                        {{-- FIX: Menggunakan rute kategori dengan ID 3 --}}
+                        <a href="{{ route('category.donasi.create', ['category' => 'education', 'campaign_id' => 3]) }}" class="btn w-100 py-3 fw-bold" style="background-color: #fbb034; color: #1a1a1a; border-radius: 10px; border: none;">
                             Donate Now
                         </a>
                     </div>

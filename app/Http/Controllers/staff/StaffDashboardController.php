@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
-use App\Models\Volunteer;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Staff;
 
-class EventController extends Controller
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\CategoryDonation; 
+use App\Models\Volunteer;
+use App\Models\Contact;
+
+class StaffDashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -12,13 +16,17 @@ class EventController extends Controller
     public function index()
     {
         //
-        
-    }
+        // Mengambil data ringkasan untuk widget dashboard
+        $data = [
+            'total_donations'   => CategoryDonation::sum('amount'),
+            'total_volunteers'  => Volunteer::count(),
+            'total_contacts'    => Contact::count(),
+            'recent_donations'  => CategoryDonation::latest()->take(5)->get(),
+            'recent_contacts'   => Contact::latest()->take(3)->get(),
+            'recent_volunteers' => Volunteer::latest()->take(5)->get(),
+        ];
 
-    public function daftarRelawan($event_id)
-    {
-    // Menampilkan halaman pendaftaran khusus untuk event yang dipilih
-    return view('volunteer.register', compact('event_id'));
+        return view('staff.dashboard', $data); // Mengarah ke views/staff/dashboard.blade.php
     }
 
     /**
@@ -35,24 +43,6 @@ class EventController extends Controller
     public function store(Request $request)
     {
         //
-        // 1. Validasi
-    $request->validate([
-        'event_id' => 'required|exists:events,id',
-        'nama'     => 'required|string|max:255',
-        'whatsapp' => 'required|string|max:20',
-        'alasan'   => 'nullable|string',
-    ]);
-
-    // 2. Simpan Permanen ke Database
-    Volunteer::create([
-        'event_id' => $request->event_id,
-        'nama'     => $request->nama,
-        'whatsapp' => $request->whatsapp,
-        'alasan'   => $request->alasan,
-    ]);
-
-    // 3. Redirect dengan pesan sukses
-    return redirect('/')->with('success', 'Terima kasih! Data Anda telah tersimpan secara permanen.');
     }
 
     /**

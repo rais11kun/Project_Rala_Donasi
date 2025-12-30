@@ -3,7 +3,7 @@
         <div class="sidebar-head">
             <h3>
                 <span class="fa-fw open-close"><i class="ti-close ti-menu"></i></span> 
-                <span class="hide-menu">Navigation</span>
+                <span class="hide-menu">GIVEHOPE STAFF</span>
             </h3>
         </div>
         <ul class="nav" id="side-menu">
@@ -14,44 +14,44 @@
             </li>
 
             <li>
-                <a href="#" class="waves-effect">
-                    <i class="fa fa-user fa-fw" aria-hidden="true"></i>Profile
+                <a href="{{ route('staff.donations.index') }}" class="waves-effect {{ Request::is('staff/donations*') ? 'active' : '' }}">
+                    <i class="fa fa-hand-holding-heart fa-fw" aria-hidden="true"></i>Donasi Kategori
                 </a>
             </li>
 
             <li>
-                <a href="#" class="waves-effect">
-                    <i class="fa fa-table fa-fw" aria-hidden="true"></i>Basic Table
+                <a href="{{ route('staff.campaigns.index') }}" class="waves-effect {{ Request::is('staff/campaigns*') ? 'active' : '' }}">
+                    <i class="fa fa-bullhorn fa-fw" aria-hidden="true"></i>Saluran & Berita
                 </a>
             </li>
 
             <li>
-                <a href="#" class="waves-effect">
-                    <i class="fa fa-font fa-fw" aria-hidden="true"></i>Icons
+                <a href="{{ route('staff.events.index') }}" class="waves-effect {{ Request::is('staff/events*') ? 'active' : '' }}">
+                    <i class="fa fa-calendar fa-fw" aria-hidden="true"></i>Kelola Event
                 </a>
             </li>
 
             <li>
-                <a href="#" class="waves-effect">
-                    <i class="fa fa-globe fa-fw" aria-hidden="true"></i>Google Map
+                <a href="{{ route('staff.volunteers.index') }}" class="waves-effect {{ Request::is('staff/volunteers*') ? 'active' : '' }}">
+                    <i class="fa fa-users fa-fw" aria-hidden="true"></i>Daftar Relawan
                 </a>
             </li>
 
             <li>
-                <a href="#" class="waves-effect">
-                    <i class="fa fa-columns fa-fw" aria-hidden="true"></i>Blank Page
+                <a href="{{ route('staff.contacts.index') }}" class="waves-effect {{ Request::is('staff/contacts*') ? 'active' : '' }}">
+                    <i class="fa fa-envelope fa-fw" aria-hidden="true"></i>Data Contact
                 </a>
             </li>
 
-            <li>
-                <a href="#" class="waves-effect">
-                    <i class="fa fa-info-circle fa-fw" aria-hidden="true"></i>Error 404
-                </a>
+            <li class="mt-4">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a href="{{ route('logout') }}" class="waves-effect text-danger" 
+                       onclick="event.preventDefault(); this.closest('form').submit();">
+                        <i class="fa fa-sign-out fa-fw text-danger" aria-hidden="true"></i>Keluar
+                    </a>
+                </form>
             </li>
         </ul>
-
-        <div class="center p-20">
-             <a href="https://wrappixel.com/templates/ampleadmin/" target="_blank" class="btn btn-danger btn-block waves-effect waves-light">Upgrade to Pro</a>
-         </div>
     </div>
 </div>

@@ -117,39 +117,44 @@
             </div>
 
             <div class="donation-card">
-                <form id="donationForm" action="{{ route('donasi.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="category" value="{{ $category }}">
+                {{-- Ganti bagian ini di file Blade Anda --}}
+                    <form id="donationForm" action="{{ route('category.donasi.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="category" value="{{ $category }}">
+                        {{-- Tambahkan ini agar ID Kampanye ikut tersimpan --}}
+                        <input type="hidden" name="campaign_id" value="{{ request()->query('campaign_id') }}">
 
-                    <div class="mb-4">
-                        <label class="h6 fw-bold mb-1">Nominal</label>
-                        <p class="text-muted small mb-3">Pilih nominal yang tersedia</p>
-                        
-                        <div class="row g-2">
-                            @foreach(['30000', '50000', '75000', '100000'] as $val)
-                            <div class="col-6 col-md-3">
-                                <input type="radio" class="btn-check" name="nominal" id="nom{{ $val }}" value="{{ $val }}">
-                                <label class="btn btn-outline-custom w-100" for="nom{{ $val }}">
-                                    Rp{{ number_format($val, 0, ',', '.') }}
-                                </label>
+                        <div class="mb-4">
+                            <label class="h6 fw-bold mb-1">Nominal</label>
+                            <p class="text-muted small mb-3">Pilih nominal yang tersedia</p>
+                            
+                            <div class="row g-2">
+                                @foreach(['30000', '50000', '75000', '100000'] as $val)
+                                <div class="col-6 col-md-3">
+                                    {{-- Gunakan name="nominal" --}}
+                                    <input type="radio" class="btn-check" name="nominal" id="nom{{ $val }}" value="{{ $val }}">
+                                    <label class="btn btn-outline-custom w-100" for="nom{{ $val }}">
+                                        Rp{{ number_format($val, 0, ',', '.') }}
+                                    </label>
+                                </div>
+                                @endforeach
                             </div>
-                            @endforeach
                         </div>
-                    </div>
 
-                    <div class="mb-4">
-                        <label class="h6 fw-bold mb-3">Nominal Lainnya</label>
-                        <div class="input-group border rounded-3 p-1">
-                            <span class="input-group-text bg-white border-0 text-muted">Rp</span>
-                            <input type="number" name="custom_nominal" class="form-control border-0 shadow-none" placeholder="0">
+                        <div class="mb-4">
+                            <label class="h6 fw-bold mb-3">Nominal Lainnya</label>
+                            <div class="input-group border rounded-3 p-1">
+                                <span class="input-group-text bg-white border-0 text-muted">Rp</span>
+                                {{-- Gunakan name="custom_nominal" --}}
+                                <input type="number" name="custom_nominal" class="form-control border-0 shadow-none" placeholder="0">
+                            </div>
+                            <p class="mt-2 text-muted" style="font-size: 12px;">Minimum donasi Rp 10.000</p>
                         </div>
-                        <p class="mt-2 text-muted" style="font-size: 12px;">Minimum donasi Rp 10.000</p>
-                    </div>
 
-                    <button type="submit" class="btn btn-submit w-100 mt-2 shadow-sm">
-                        Selanjutnya
-                    </button>
-                </form>
+                        <button type="submit" class="btn btn-submit w-100 mt-2 shadow-sm">
+                            Selanjutnya
+                        </button>
+                    </form>
             </div>
 
         </div>
