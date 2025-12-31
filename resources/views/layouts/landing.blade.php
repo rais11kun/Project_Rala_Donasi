@@ -15,11 +15,12 @@
 
     {{-- HERO --}}
     @include('landing.partials.hero')
+    
+    {{-- KONTEN --}}
     @include('landing.partials.about')
     @include('landing.partials.categories')
     @include('landing.partials.events')
     @include('landing.partials.contact')
-    {{-- KONTEN --}}
     <!-- @yield('content') -->
 
     <!-- JS TEMPLATE -->

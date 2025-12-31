@@ -14,8 +14,7 @@ class StaffCategoryDonationController extends Controller
     public function index()
     {
         //
-        $categories = \App\Models\CategoryDonation::all();
-        // Sesuaikan dengan folder: staff/donasi_category
+        $categories = CategoryDonation::all();
         return view('staff.donasi_category.index', compact('categories'));
     }
 
@@ -33,10 +32,14 @@ class StaffCategoryDonationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi input tambahan sesuai kebutuhan Landing Page
         $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'label' => 'nullable|string|max:50', // Contoh: Food, Health
+            'description' => 'nullable|string',
+            'goal' => 'required|numeric|min:0',
+            'raised' => 'nullable|numeric|min:0',
         ]);
 
         // Proses Upload Gambar ke public/asset-landing/img/
@@ -46,9 +49,14 @@ class StaffCategoryDonationController extends Controller
             $file->move(public_path('asset-landing/img'), $nama_file);
         }
 
+        // Simpan data lengkap ke database
         CategoryDonation::create([
             'name' => $request->name,
             'image' => $nama_file ?? null,
+            'label' => $request->label,
+            'description' => $request->description,
+            'goal' => $request->goal,
+            'raised' => $request->raised ?? 0, // Default 0 jika kosong
         ]);
 
         return redirect()->route('staff.donations.index')->with('success', 'Kategori berhasil ditambahkan!');
@@ -68,7 +76,7 @@ class StaffCategoryDonationController extends Controller
     public function edit(string $id)
     {
         //
-        $category = \App\Models\CategoryDonation::findOrFail($id);
+        $category = CategoryDonation::findOrFail($id);
         return view('staff.donasi_category.edit', compact('category'));
     }
 
@@ -78,10 +86,19 @@ class StaffCategoryDonationController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $category = \App\Models\CategoryDonation::findOrFail($id);
+        $category = CategoryDonation::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'label' => 'nullable|string|max:50',
+            'description' => 'nullable|string',
+            'goal' => 'required|numeric|min:0',
+            'raised' => 'nullable|numeric|min:0',
+        ]);
     
-         if ($request->hasFile('image')) {
-            // Hapus foto lama jika ada
+        if ($request->hasFile('image')) {
+            // Hapus foto lama jika ada di folder asset-landing/img/
             if ($category->image && file_exists(public_path('asset-landing/img/' . $category->image))) {
                 unlink(public_path('asset-landing/img/' . $category->image));
             }
@@ -90,12 +107,17 @@ class StaffCategoryDonationController extends Controller
             $nama_file = time() . "_" . $file->getClientOriginalName();
             $file->move(public_path('asset-landing/img'), $nama_file);
             $category->image = $nama_file;
-            }
+        }
 
-            $category->name = $request->name;
-            $category->save();
+        // Update semua field baru
+        $category->name = $request->name;
+        $category->label = $request->label;
+        $category->description = $request->description;
+        $category->goal = $request->goal;
+        $category->raised = $request->raised ?? 0;
+        $category->save();
 
-            return redirect()->route('staff.donations.index')->with('success', 'Kategori berhasil diperbarui');
+        return redirect()->route('staff.donations.index')->with('success', 'Kategori berhasil diperbarui');
     }
 
     /**
@@ -104,5 +126,14 @@ class StaffCategoryDonationController extends Controller
     public function destroy(string $id)
     {
         //
+        $category = CategoryDonation::findOrFail($id);
+        
+        // Hapus file gambar sebelum menghapus data dari database
+        if ($category->image && file_exists(public_path('asset-landing/img/' . $category->image))) {
+            unlink(public_path('asset-landing/img/' . $category->image));
+        }
+
+        $category->delete();
+        return redirect()->route('staff.donations.index')->with('success', 'Kategori berhasil dihapus');
     }
 }

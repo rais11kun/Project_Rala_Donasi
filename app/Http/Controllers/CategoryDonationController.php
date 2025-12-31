@@ -35,31 +35,71 @@ class CategoryDonationController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Logika memilih nominal: Prioritaskan input manual jika diisi
-        $finalAmount = $request->custom_nominal ?: $request->nominal;
+        // Validasi input
+    $request->validate([
+        'category_id' => 'required',
+        'amount' => 'nullable|numeric',
+        'manual_amount' => 'nullable|numeric',
+    ]);
 
-        if (!$finalAmount || $finalAmount < 10000) {
-            return back()->with('error', 'Minimal donasi adalah Rp 10.000');
-        }
+    // Tentukan nominal
+    $nominal = $request->manual_amount ?: $request->amount;
 
-        // 2. Simpan ke tabel category_donations (Model baru)
-        $donation = \App\Models\CategoryDonation::create([
-            'campaign_id' => $request->campaign_id,
-            'category'    => $request->category,
-            'amount'      => $finalAmount,
-            'status'      => 'pending',
-        ]);
+    if (!$nominal) {
+        return back()->with('error', 'Silakan pilih atau masukkan nominal.');
+    }
 
-        // 3. Langsung tampilkan halaman QR (confirmation.blade.php)
-        return view('donations.confirmation2', [
-            'amount'   => $donation->amount,
-            'category' => $donation->category
-        ]);
+    // Simpan data ke database
+    \App\Models\ConfirmedDonation::create([
+        'category_donation_id' => $request->category_id,
+        'donator_name' => 'Hamba Allah', // Bisa diganti input nama jika ada
+        'amount' => $nominal,
+        'status' => 'pending',
+    ]);
+
+    return back()->with('success', 'Konfirmasi Anda sebesar Rp ' . number_format($nominal, 0, ',', '.') . ' telah terkirim ke Staff.');
     }
 
     /**
      * Display the specified resource.
      */
+
+    public function manageIncoming()
+{
+    // Ambil data donasi masuk beserta nama kategorinya
+    $donations = \App\Models\IncomingDonation::with('category')->latest()->get();
+    return view('staff.incoming.index', compact('donations'));
+}
+
+public function indexConfirmed()
+{
+    // Ambil data dari tabel confirmed_donations
+    $donations = \App\Models\ConfirmedDonation::with('category')->latest()->get();
+    
+    // Sesuaikan path view ke folder kelola_donasi
+    return view('staff.kelola_donasi.index', compact('donations'));
+}
+
+public function verify($id)
+{
+    $donation = \App\Models\ConfirmedDonation::findOrFail($id);
+
+    if ($donation->status == 'pending') {
+        // 1. Ubah status donasi jadi success
+        $donation->status = 'success';
+        $donation->save();
+
+        // 2. Tambahkan nominal ke saldo 'raised' di tabel CategoryDonation
+        $category = $donation->category;
+        $category->raised += $donation->amount;
+        $category->save();
+
+        return back()->with('success', 'Donasi berhasil diverifikasi! Saldo program otomatis bertambah.');
+    }
+
+    return back()->with('error', 'Donasi ini sudah diverifikasi sebelumnya.');
+}
+    
     public function show(string $id)
     {
         //

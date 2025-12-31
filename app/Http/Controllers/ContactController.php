@@ -12,6 +12,10 @@ class ContactController extends Controller
     public function index()
     {
         //
+        // Mengambil semua pesan masuk terbaru
+        $contacts = Contact::latest()->get();
+        
+        return view('staff.data_contact.index', compact('contacts'));
     }
 
     /**
@@ -74,5 +78,9 @@ class ContactController extends Controller
     public function destroy(string $id)
     {
         //
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+
+        return back()->with('success', 'Pesan berhasil dihapus.');
     }
 }

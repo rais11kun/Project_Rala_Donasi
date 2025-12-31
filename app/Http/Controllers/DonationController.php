@@ -83,6 +83,14 @@ public function confirmation($id)
 
     return view('donations.confirmation', compact('donation'));
 }
+
+public function checkout($id)
+{
+    // Ambil data kategori berdasarkan ID agar gambar dan judul bisa dinamis
+    $category = \App\Models\CategoryDonation::findOrFail($id);
+    
+    return view('donations.category', compact('category'));
+}
     public function show(string $id)
     {
         //

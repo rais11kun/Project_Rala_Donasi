@@ -14,11 +14,5 @@ class CategoryDonation extends Model
     protected $table = 'category_donations';
 
     // WAJIB: Daftarkan kolom agar bisa disimpan
-    protected $fillable = [
-        'campaign_id',
-        'category',
-        'amount',
-        'notes',
-        'status'
-    ];
+    protected $fillable = ['name', 'image', 'label', 'description', 'goal', 'raised'];
 }

@@ -13,6 +13,10 @@ class VolunteerController extends Controller
     public function index()
     {
         //
+        $volunteers = \App\Models\Volunteer::with('event')->latest()->get();
+
+        // Sesuaikan path ke staff/daftar_relawan
+        return view('staff.daftar_relawan.index', compact('volunteers'));
     }
 
     /**
@@ -22,9 +26,10 @@ class VolunteerController extends Controller
     {
         //
         // Cari data berdasarkan ID
-        $event = Event::findOrFail($id);
-        // Kirim ke view
-        return view('volunteer.register', compact('event'));
+        $event = \App\Models\Event::findOrFail($id); 
+
+        // 2. Arahkan ke file Anda: resources/views/volunteer/register.blade.php
+         return view('volunteer.register', compact('event'));
     }
 
     /**
@@ -87,5 +92,9 @@ class VolunteerController extends Controller
     public function destroy(string $id)
     {
         //
+        $volunteer = Volunteer::findOrFail($id);
+        $volunteer->delete();
+
+        return back()->with('success', 'Data relawan berhasil dihapus.');
     }
 }

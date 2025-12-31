@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('donations', function (Blueprint $table) {
-          $table->foreignId('campaign_id')->nullable()->constrained('campaigns')->onDelete('cascade');
-        $table->string('category')->nullable();
-        // $table->decimal('amount', 15, 2);
+        Schema::table('category_donations', function (Blueprint $table) {
+            //
+            $table->string('image')->nullable()->after('amount');
         });
     }
 
@@ -23,8 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('donations', function (Blueprint $table) {
+        Schema::table('category_donations', function (Blueprint $table) {
             //
+            $table->dropColumn('image');
         });
     }
 };

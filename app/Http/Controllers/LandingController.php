@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CategoryDonation;
+
 
 class LandingController extends Controller
 {
@@ -12,7 +14,8 @@ class LandingController extends Controller
     public function index()
     {
         //
-         return view('landing.index');
+        $categories = \App\Models\CategoryDonation::all();
+        return view('layouts.landing', compact('categories'));
     }
 
     /**

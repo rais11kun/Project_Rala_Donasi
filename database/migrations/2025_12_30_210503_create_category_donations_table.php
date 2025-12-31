@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('category_donations', function (Blueprint $table) {
             $table->id();
             $table->integer('campaign_id')->nullable(); // Menghubungkan ke ID kampanye
-            $table->string('category'); // Food, Health, atau Education
-            $table->decimal('amount', 15, 2); // Nominal donasi
+            $table->string('category')->nullable();
+            $table->decimal('amount', 15, 2)->nullable();
             $table->text('notes')->nullable(); // Pesan dari tamu
             $table->string('status')->default('pending'); // Status awal untuk staff
             $table->timestamps();

@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 use Illuminate\View\View;
-
+use Illuminate\Support\Facades\Schema;
 class AppLayout extends Component
 {
     /**
@@ -13,5 +13,11 @@ class AppLayout extends Component
     public function render(): View
     {
         return view('layouts.app');
+    }
+
+    public function boot()
+    {
+    // Tambahkan ini jika menggunakan MySQL untuk mengabaikan error constraint saat migrasi
+    Schema::disableForeignKeyConstraints();
     }
 }

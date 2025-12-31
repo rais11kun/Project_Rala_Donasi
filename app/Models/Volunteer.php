@@ -9,4 +9,10 @@ class Volunteer extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function event()
+{
+    // Pastikan foreign key-nya adalah event_id
+    return $this->belongsTo(Event::class, 'event_id');
+}
 }
