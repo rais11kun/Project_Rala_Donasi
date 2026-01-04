@@ -38,10 +38,10 @@ Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', function () {
     return 'Dashboard Admin';
 });
 
-// STAFF
-Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', function () {
-    return 'Dashboard Staff';
-});
+// // STAFF
+// Route::middleware(['auth', 'role:staff'])->get('/staff/dashboard', function () {
+//     return 'Dashboard Staff';
+// });
 
 
 Route::middleware(['auth', 'role:admin,staff'])->group(function () {
@@ -127,11 +127,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 
-Route::middleware(['auth', 'role:staff'])
-    ->get('/staff/dashboard', function () {
-        return view('staff.dashboard');
-    })
-    ->name('staff.dashboard');
+// Route::middleware(['auth', 'role:staff'])
+//     ->get('/staff/dashboard', function () {
+//         return view('staff.dashboard');
+//     })
+//     ->name('staff.dashboard');
 
     
 Route::get('/donasi/{category}', [DonationController::class, 'showByCategory'])->name('donasi.category');
@@ -178,33 +178,29 @@ Route::post('/category-donation/store', [CategoryDonationController::class, 'sto
 
 
 
-Route::middleware(['auth'])->prefix('staff')->name('staff.')->group(function () {
+Route::middleware(['auth', 'role:staff'])
+    ->prefix('staff')
+    ->name('staff.')
+    ->group(function () {
 
-    // Dashboard
-    Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard', [StaffDashboardController::class, 'index'])
+            ->name('dashboard');
 
-    // Profil Staff
-    Route::get('/profile', [StaffDashboardController::class, 'profile'])->name('profile');
-    Route::post('/profile/update', [StaffDashboardController::class, 'profileUpdate'])->name('profile.update');
+        Route::get('/profile', [StaffDashboardController::class, 'profile'])
+            ->name('profile');
 
-    // Donasi
-    Route::resource('donations', StaffCategoryDonationController::class);
-    Route::get('/incoming-donations', [CategoryDonationController::class, 'indexConfirmed'])->name('incoming.index');
-    Route::post('/incoming-donations/verify/{id}', [CategoryDonationController::class, 'verify'])->name('incoming.verify');
+        Route::post('/profile/update', [StaffDashboardController::class, 'profileUpdate'])
+            ->name('profile.update');
 
-    // Campaign
-    Route::resource('campaigns', CampaignDonationsController::class);
+        Route::resource('donations', StaffCategoryDonationController::class);
+        Route::resource('campaigns', CampaignDonationsController::class);
+        Route::resource('events', StaffEventController::class);
 
-    // Event
-    Route::resource('events', StaffEventController::class);
+        Route::get('/contacts', [ContactController::class, 'index'])
+            ->name('contacts.index');
 
-    // Kontak
-    Route::get('/contacts', [ContactController::class, 'index'])->name('contacts.index');
-    Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
-
-    // Relawan
-    Route::get('/volunteers', [VolunteerController::class, 'index'])->name('volunteers.index');
-    Route::delete('/volunteers/{id}', [VolunteerController::class, 'destroy'])->name('volunteers.destroy');
+        Route::get('/volunteers', [VolunteerController::class, 'index'])
+            ->name('volunteers.index');
 });
 
 // Public Donasi
