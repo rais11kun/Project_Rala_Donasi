@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\staff;
+namespace App\Http\Controllers\Staff;
 use App\Models\Donation;
 use App\Models\Campaign;
 use Illuminate\Http\Request;
