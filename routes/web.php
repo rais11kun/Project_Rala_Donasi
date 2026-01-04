@@ -118,6 +118,11 @@ Route::middleware(['auth','role:admin'])
             ->name('activity-log.index');
     });
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('categories', CategoryController::class);
+});
+
+
 Route::middleware(['auth', 'role:staff'])
     ->get('/staff/dashboard', function () {
         return view('staff.dashboard');

@@ -14,14 +14,15 @@ class DonationController extends Controller
     public function index(Request $request) 
     {
         //
-        $categories = Category::all();
+       $categories = Category::all();
 
     $donations = Donation::with(['user', 'category'])
         ->when($request->category_id, function ($query) use ($request) {
             $query->where('category_id', $request->category_id);
         })
         ->latest()
-        ->get();
+        ->paginate(5) 
+        ->withQueryString(); 
 
     return view('admin.donations.index', compact('donations', 'categories'));
     }

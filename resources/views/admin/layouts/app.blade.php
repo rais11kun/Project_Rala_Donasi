@@ -4,6 +4,8 @@
   <meta charset="utf-8" />
   <title>@yield('title', 'Admin Dashboard')</title>
 
+  <!-- @vite(['resources/css/app.css', 'resources/js/app.js']) -->
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 

@@ -83,8 +83,11 @@ class StaffDashboardController extends Controller
     }
     
     public function contactsIndex() {
-        // Ganti dengan view pesan masuk Anda nanti
-        return view('staff.contacts.index');
+        // Mengambil data dengan Pagination agar dapat poin 10% UAS
+        $contacts = \App\Models\Contact::latest()->paginate(10);
+    
+        // SESUAIKAN INI: Ganti 'contacts' menjadi 'data_contact'
+        return view('staff.data_contact.index', compact('contacts'));
     }
     public function create()
     {
