@@ -11,6 +11,10 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\VolunteerController;
 use App\Http\Controllers\CampaignDonationController;
 use App\Http\Controllers\CategoryDonationController;
+use App\Http\Controllers\Staff\StaffDashboardController;
+use App\Http\Controllers\Staff\CampaignDonationsController;
+use App\Http\Controllers\Staff\StaffCategoryDonationController;
+use App\Http\Controllers\Staff\StaffEventController;
 
 
 Route::get('/', function () {
@@ -172,10 +176,7 @@ Route::post('/volunteer/register', [VolunteerController::class, 'store'])->name(
 Route::get('/category-donation/create', [CategoryDonationController::class, 'create'])->name('category.donasi.create');
 Route::post('/category-donation/store', [CategoryDonationController::class, 'store'])->name('category.donasi.store');
 
-use App\Http\Controllers\Staff\StaffDashboardController;
-use App\Http\Controllers\Staff\CampaignDonationsController;
-use App\Http\Controllers\Staff\StaffCategoryDonationController;
-use App\Http\Controllers\Staff\StaffEventController;
+
 
 Route::prefix('staff')->name('staff.')->group(function () {
     Route::get('/dashboard', [StaffDashboardController::class, 'index'])->name('dashboard');
