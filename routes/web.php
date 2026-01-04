@@ -177,32 +177,119 @@ Route::get('/category-donation/create', [CategoryDonationController::class, 'cre
 Route::post('/category-donation/store', [CategoryDonationController::class, 'store'])->name('category.donasi.store');
 
 
+Route::prefix('staff')->name('staff.')->group(function () {
 
-Route::middleware(['auth', 'role:staff'])
-    ->prefix('staff')
-    ->name('staff.')
-    ->group(function () {
+    Route::get('/dashboard', [StaffDashboardController::class, 'index'])
+        ->name('dashboard');
 
-        Route::get('/dashboard', [StaffDashboardController::class, 'index'])
-            ->name('dashboard');
+    // Daftarkan route yang error tadi di sini
+    Route::get('/donations', [CategoryDonationController::class, 'index'])
+        ->name('donations.index');
 
-        Route::get('/profile', [StaffDashboardController::class, 'profile'])
-            ->name('profile');
+    Route::resource('campaigns', CampaignDonationsController::class);
 
-        Route::post('/profile/update', [StaffDashboardController::class, 'profileUpdate'])
-            ->name('profile.update');
+    Route::get('/events', [EventController::class, 'index'])
+        ->name('events.index');
 
-        Route::resource('donations', StaffCategoryDonationController::class);
-        Route::resource('campaigns', CampaignDonationsController::class);
-        Route::resource('events', StaffEventController::class);
+    Route::get('/volunteers', [App\Http\Controllers\VolunteerController::class, 'index'])
+        ->name('volunteers.index');
 
-        Route::get('/contacts', [ContactController::class, 'index'])
-            ->name('contacts.index');
+    Route::get('/contacts', [ContactController::class, 'index'])
+        ->name('contacts.index');
 
-        Route::get('/volunteers', [VolunteerController::class, 'index'])
-            ->name('volunteers.index');
+    Route::resource('donations', StaffCategoryDonationController::class);
+
+    Route::resource('events', StaffEventController::class);
+
+    Route::get('/incoming-donations', [CategoryDonationController::class, 'manageIncoming'])
+        ->name('staff.incoming.index');
+
+    // Aksi Verifikasi
+    Route::post('/incoming-donations/verify/{id}', [CategoryDonationController::class, 'verifyIncoming'])
+        ->name('staff.incoming.verify');
+
+    Route::get('/staff/profile', [StaffDashboardController::class, 'profile'])
+        ->name('staff.profile');
+
+    Route::post('/staff/profile/update', [StaffDashboardController::class, 'profileUpdate'])
+        ->name('staff.profile.update');
+
+    // Tambahkan juga rute ini agar tidak error saat klik 'Pesan Masuk'
+    Route::get('/staff/contacts', [StaffDashboardController::class, 'contactsIndex'])
+        ->name('staff.contacts.index');
 });
 
-// Public Donasi
-Route::get('/donation/checkout/{id}', [DonationController::class, 'checkout'])->name('donation.checkout');
-Route::post('/donation/store', [CategoryDonationController::class, 'store'])->name('donation.store');
+/*
+|--------------------------------------------------------------------------
+| Staff Volunteers (Outside Group)
+|--------------------------------------------------------------------------
+*/
+Route::get('/staff/volunteers', [VolunteerController::class, 'index'])
+    ->name('staff.volunteers.index');
+
+// TAMBAHKAN INI: Route untuk menghapus relawan
+Route::delete('/staff/volunteers/{id}', [VolunteerController::class, 'destroy'])
+    ->name('staff.volunteers.destroy');
+
+/*
+|--------------------------------------------------------------------------
+| Landing Page
+|--------------------------------------------------------------------------
+*/
+use App\Http\Controllers\LandingController;
+
+Route::get('/', [LandingController::class, 'index']);
+
+/*
+|--------------------------------------------------------------------------
+| Donation Checkout
+|--------------------------------------------------------------------------
+*/
+Route::get('/donation/checkout/{id}', [DonationController::class, 'checkout'])
+    ->name('donation.checkout');
+
+Route::post('/donation/store', [CategoryDonationController::class, 'store'])
+    ->name('donation.store');
+
+/*
+|--------------------------------------------------------------------------
+| Staff Donation Management
+|--------------------------------------------------------------------------
+*/
+Route::get('/staff/kelola-donasi', [CategoryDonationController::class, 'indexConfirmed'])
+    ->name('staff.incoming.index');
+
+Route::post('/staff/verify-donasi/{id}', [CategoryDonationController::class, 'verify'])
+    ->name('staff.incoming.verify');
+
+/*
+|--------------------------------------------------------------------------
+| Staff Contacts (Auth Group)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->prefix('staff')->name('staff.')->group(function () {
+
+    // Kelola Pesan Kontak
+    Route::get('/contacts', [ContactController::class, 'index'])
+        ->name('contacts.index');
+
+    Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])
+        ->name('contacts.destroy');
+});
+
+/*
+|--------------------------------------------------------------------------
+| Staff Profile (Outside Group)
+|--------------------------------------------------------------------------
+*/
+// Tambahkan ini di dalam Route Group Staff Anda
+// Rute untuk profil staff agar error di navbar hilang
+Route::get('/staff/profile', [StaffDashboardController::class, 'profile'])
+    ->name('staff.profile');
+
+Route::post('/staff/profile/update', [StaffDashboardController::class, 'profileUpdate'])
+    ->name('staff.profile.update');
+
+// Tambahkan juga rute ini agar tidak error saat klik 'Pesan Masuk'
+Route::get('/staff/contacts', [StaffDashboardController::class, 'contactsIndex'])
+    ->name('staff.contacts.index');
