@@ -33,9 +33,13 @@ class DonationController extends Controller
 
     public function approve(Donation $donation)
     {
+        if ($donation->status !== 'pending') {
+        return back()->with('error', 'Donasi sudah diproses sebelumnya.');
+        }
+
         $donation->update([
         'status' => 'approved'
-    ]);
+        ]);
 
     ActivityLog::create([
         'user_id'  => $donation->user_id,
@@ -51,8 +55,12 @@ class DonationController extends Controller
 
     public function reject(Donation $donation)
     {
+        if ($donation->status !== 'pending') {
+        return back()->with('error', 'Donasi sudah diproses sebelumnya.');
+        }
+
         $donation->update([
-            'status' => 'rejected'
+        'status' => 'rejected'
         ]);
 
         ActivityLog::create([

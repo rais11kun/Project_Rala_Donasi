@@ -18,10 +18,32 @@
             </div>
 
             <div class="d-none d-lg-flex ms-2">
-                <a class="btn py-2 px-4 fw-bold" href="{{ route('login') }}" 
-                   style="border: 2px solid #126d61; color: #126d61; border-radius: 10px; transition: 0.3s;">
-                   Masuk
-                </a>
+                {{-- TAMPILKAN JIKA BELUM LOGIN (GUEST) --}}
+                @guest
+                    <a class="btn py-2 px-4 fw-bold" href="{{ route('login') }}" 
+                       style="border: 2px solid #126d61; color: #126d61; border-radius: 10px; transition: 0.3s;">
+                       Masuk
+                    </a>
+                @endguest
+
+                {{-- TAMPILKAN JIKA SUDAH LOGIN (AUTH) --}}
+                @auth
+                    <div class="nav-item dropdown">
+                        <a href="#" class="btn py-2 px-4 fw-bold dropdown-toggle" data-bs-toggle="dropdown"
+                           style="border: 2px solid #126d61; color: #126d61; border-radius: 10px;">
+                           <i class="fas fa-user-circle me-1"></i> {{ Auth::user()->name }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end m-0 shadow-sm border-0">
+                            {{-- Gunakan Form untuk Logout demi keamanan CSRF --}}
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger fw-bold">
+                                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @endauth
             </div>
         </div>
     </div>
@@ -55,9 +77,15 @@
         width: 60%;
     }
 
-    /* Hover Tombol Masuk */
-    .btn-outline-teal:hover {
-        background-color: #126d61;
+    /* Hover Tombol Masuk/Logout */
+    .navbarCollapse .btn:hover {
+        background-color: #126d61 !important;
         color: white !important;
+    }
+
+    /* Merapikan posisi dropdown */
+    .dropdown-menu {
+        border-radius: 10px;
+        margin-top: 10px !important;
     }
 </style>

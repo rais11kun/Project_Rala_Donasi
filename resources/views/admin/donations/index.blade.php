@@ -109,18 +109,21 @@
 
                                 {{-- AKSI --}}
                                 <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                {{-- DETAIL --}}
+                                <button class="btn btn-sm btn-info action-btn"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#donationDetail{{ $donation->id }}">
+                                    <i class="material-icons text-sm">visibility</i>
+                                </button>
 
-                                    {{-- DETAIL --}}
-                                    <button class="btn btn-sm btn-info"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#donationDetail{{ $donation->id }}">
-                                        <i class="material-icons text-sm">visibility</i>
-                                    </button>
+                                {{-- HANYA JIKA PENDING --}}
+                                @if ($donation->status === 'pending')
 
                                     {{-- APPROVE --}}
                                     <form method="POST"
-                                          action="{{ route('admin.donations.approve', $donation->id) }}"
-                                          class="d-inline">
+                                        action="{{ route('admin.donations.approve', $donation->id) }}"
+                                        class="d-inline">
                                         @csrf
                                         @method('PATCH')
                                         <button class="btn btn-sm btn-success">
@@ -130,8 +133,8 @@
 
                                     {{-- REJECT --}}
                                     <form method="POST"
-                                          action="{{ route('admin.donations.reject', $donation->id) }}"
-                                          class="d-inline">
+                                        action="{{ route('admin.donations.reject', $donation->id) }}"
+                                        class="d-inline">
                                         @csrf
                                         @method('PATCH')
                                         <button class="btn btn-sm btn-danger">
@@ -139,7 +142,19 @@
                                         </button>
                                     </form>
 
-                                </td>
+                                @else
+
+                                    {{-- INDIKATOR SAJA --}}
+                                    <button class="btn btn-sm btn-secondary action-btn"
+                                            disabled>
+                                        SUDAH DIPROSES
+                                    </button>
+
+                                @endif
+                                </div>
+                            </td>
+
+
                             </tr>
 
                             {{-- MODAL DETAIL --}}
@@ -163,14 +178,12 @@
                                             <p><strong>Jumlah:</strong> Rp {{ number_format($donation->amount) }}</p>
 
                                             <strong>Status:</strong><br>
-                                            @if ($donation->status === 'pending')
-                                                <span class="badge bg-gradient-warning">Pending</span>
-                                            @elseif ($donation->status === 'approved')
+                                            {{-- APPROVE --}}
+                                            @if ($donation->status === 'approved')
                                                 <span class="badge bg-gradient-success">Approved</span>
-                                            @else
+                                            @elseif ($donation->status === 'rejected')
                                                 <span class="badge bg-gradient-danger">Rejected</span>
                                             @endif
-
                                             <hr>
 
                                             <strong>Bukti Transfer</strong><br>
@@ -230,5 +243,23 @@
         background: linear-gradient(310deg, #2152ff, #21d4fd);
         border: none;
     }
+
+    .btn-disabled {
+    opacity: 0.45;          /* bikin redup */
+    cursor: not-allowed;    /* tanda tidak bisa diklik */
+    box-shadow: none;
+    }
+
+    .action-btn {
+    min-width: 120px;     /* bikin lebar sama */
+    height: 36px;         /* tinggi konsisten */
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    }
+
+
 </style>
 @endsection
